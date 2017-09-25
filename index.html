@@ -39,10 +39,10 @@
                 <section id="fragments">
                     <h2>Códigos de barras</h2>
                     <section>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/UPC-A-036000291452.png" width="20%"/>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Barcode_EAN_13.gif" width="26%"/>
-                        <img src="https://www.qrstuff.com/images/sample.png" width="15%"/>
-                        <p class="fragment">Es una representación de datos que pueden ser leídos por una máquina.</p>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/UPC-A-036000291452.png" width="10%"/>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Barcode_EAN_13.gif" width="13%"/>
+                        <img src="https://www.qrstuff.com/images/sample.png" width="7%"/>
+                        <p class="fragment">Es un código basado en la representación de un conjunto de líneas paralelas de distinto grosor y espaciado que en su conjunto contienen una determinada información que pueden ser leídos por una máquina.</p>
                         <p class="fragment">Generalmente describe información del producto que tiene el código.</p>
                     </section>
                 </section>
@@ -69,7 +69,7 @@
                 </section>
                 <section>
                     <section data-markdown>
-                        ### Lineales
+                        ### Lineales - 1D
                         Compuesto de líneas y espacios de anchos diferentes que crean patrones específicos
                     </section>
                     <section>
@@ -101,7 +101,7 @@
                 </section>
                 <section>
                     <section data-markdown>
-                        ### Matriciales
+                        ### Matriciales - 2D
                         Es una forma en dos dimensiones de representar información.
                         
                         Puede representar más datos por unidad de área
@@ -157,6 +157,91 @@
                         ||RSS-14||
                         ||RSS-Expanded||
                     </section>
+                    <section>
+                    <h4>Implementación</h4>
+                    <h5>Layout</h5>
+                            <img src="src/zxing1.png" width="15%"/>
+                    </section>
+
+                    <section>
+                    <h5>Activity </h5>
+                    <pre><code class="hljava" data-trim contenteditable>
+package co.edu.unal.barcodes;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+public class ZXingActivity extends AppCompatActivity{
+
+    public static TextView barcodeInfo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zxing);
+        barcodeInfo = (TextView) findViewById(R.id.zxing_result);
+    }
+
+    public void scanZXing(View view){
+        startActivity(new Intent(this, ZXing.class));
+    }
+}
+
+
+                    </code></pre>
+                    </section>
+<section>
+                    <h5>ZXing </h5>
+                    <pre><code class="hljava" data-trim contenteditable>
+package co.edu.unal.barcodes;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.google.zxing.Result;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class ZXing extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+
+    private ZXingScannerView mScannerView;
+
+    @Override
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);                // Set the scanner view as the content view
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();          // Start camera on resume
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();           // Stop camera on pause
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        ZXingActivity.barcodeInfo.setText(result.getText());
+        onBackPressed();
+    }
+}
+
+                    </code></pre>
+                    </section>
+                        <section>
+                    <h5>mScannerView</h5>
+                            <img src="src/scan.png" width="15%"/>
+                    </section>
                 </section>
                 <section>
                     <section data-markdown>
@@ -175,8 +260,95 @@
                         * EAN-8
                         * Code 128
                         * Code 39
+                        * Interleaved 2 of 5
                         * QR Code
                     </section>
+                    <section>
+                    <h4>Implementación</h4>
+                    <h5>Layout</h5>
+                            <img src="src/zbar1.png" width="15%"/>
+                    </section>
+
+                    <section>
+                    <h5>Activity </h5>
+                    <pre><code class="hljava" data-trim contenteditable>
+package co.edu.unal.barcodes;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
+public class ZBarActivity extends AppCompatActivity{
+
+    public static TextView barcodeInfo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zbar);
+        barcodeInfo = (TextView) findViewById(R.id.zbar_result);
+    }
+
+    public void scanZBar(View view){
+        startActivity(new Intent(this, ZBar.class));
+    }
+}
+
+                    </code></pre>
+                    </section>
+<section>
+                    <h5>Zbar </h5>
+                    <pre><code class="hljava" data-trim contenteditable>
+package co.edu.unal.barcodes;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import me.dm7.barcodescanner.zbar.Result;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
+
+public class ZBar extends AppCompatActivity implements ZBarScannerView.ResultHandler {
+
+    private ZBarScannerView mScannerView;
+
+    @Override
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZBarScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);                // Set the scanner view as the content view
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();          // Start camera on resume
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();           // Stop camera on pause
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        ZBarActivity.barcodeInfo.setText(result.getContents());
+        onBackPressed();
+    }
+}
+
+                    </code></pre>
+                    </section>
+                    <section>
+                    <h5>mScannerView</h5>
+                            <img src="src/scan.png" width="15%"/>
+                    </section>
+
+
+
                 </section>
                 <section>
                     <section data-markdown>
@@ -202,6 +374,112 @@
                         |ITF||
                         |Codabar||
                     </section>
+                    <section>
+                    <h4>Implementación</h4>
+                    <h5>Layout</h5>
+                            <img src="src/google.png" width="15%"/>
+                    </section>
+
+                    <section>
+                    <h5>Activity </h5>
+                    <pre><code class="hljava" data-trim contenteditable>
+package co.edu.unal.barcodes;
+
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.widget.TextView;
+
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+
+import java.io.IOException;
+
+public class MobileVision extends AppCompatActivity {
+
+    private SurfaceView cameraView;
+    private TextView barcodeInfo;
+    private CameraSource cameraSource;
+    private BarcodeDetector barcodeDetector;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mobile_vision);
+
+        cameraView = (SurfaceView) findViewById(R.id.camera_view);
+        barcodeInfo = (TextView) findViewById(R.id.mobile_vision_result);
+
+        barcodeDetector =
+                new BarcodeDetector.Builder(this).build();
+
+        cameraSource = new CameraSource
+                .Builder(this, barcodeDetector)
+                .setRequestedPreviewSize(640, 400)
+                .build();
+
+        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                try {
+                    if (ActivityCompat.checkSelfPermission(
+                            getApplicationContext(),
+                            android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    cameraSource.start(cameraView.getHolder());
+                } catch (IOException ie) {
+                    Log.e("CAMERA SOURCE", ie.getMessage());
+                }
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                cameraSource.stop();
+            }
+        });
+
+        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            @Override
+            public void release() {}
+
+            @Override
+            public void receiveDetections(Detector.Detections<Barcode> detections) {
+                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+
+                if (barcodes.size() != 0) {
+                    barcodeInfo.post(new Runnable() {    // Use the post method of the TextView
+                        public void run() {
+                            barcodeInfo.setText(barcodes.valueAt(0).displayValue);
+                        }
+                    });
+                }
+            }
+        });
+    }
+}
+
+
+                    </code></pre>
+
+                </section>
                 </section>
 				<section data-markdown data-background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Example_barcode.svg/2000px-Example_barcode.svg.png">
                     # Gracias
