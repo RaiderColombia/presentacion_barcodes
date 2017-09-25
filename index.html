@@ -143,7 +143,13 @@
                     </section>
                     <section>
                         <img src="https://camo.githubusercontent.com/cd92fcc87ebc531c60edc667da4a77b90c004ff0/68747470733a2f2f7261772e6769746875622e636f6d2f77696b692f7a78696e672f7a78696e672f7a78696e672d6c6f676f2e706e67" width="20%"/>
-                        <p>ZXing ("zebra crossing") es una librería Open Source para el procesamiento de imágenes de códigos de barras en formatos 1D/2D implementada en Java</p>
+                        <p>ZXing ("zebra crossing") es una librería Open Source para el procesamiento de imágenes de códigos de barras en formatos en una o dos dimensiones</p>
+                        <aside class="notes">
+                            <ul>
+                                <li>Está implementada en Java</li>
+                                <li>Tiene varios ports a otros lenguajes</li>
+                            </ul>
+                        </aside>
                     </section>
                     <section data-markdown>
                         ### Formatos soportados
@@ -156,6 +162,67 @@
                         ||ITF|MaxiCode|
                         ||RSS-14||
                         ||RSS-Expanded||
+                    </section>
+                    <section>
+                        <h3>Google Play</h3>
+                        <img src="https://lh6.ggpht.com/os72icmFlDtbxpYbZCP-v6kOereSLGDmlKsBl1ISTPdgbcpoc4rSIuXDuoDECvgcvoFJ=w300" width="20%"/>
+                        <h4>Barcode Scanner</h4>
+                        <blockquote>
+                            &ldquo;<i>Scan barcodes on products, or Data Matrix and QR Codes containing URLs, contact info, etc.</i>&rdquo;
+                        </blockquote>
+                        <aside class="notes">
+                            Tiene una aplicación en la Google Play
+                        </aside>
+                    </section>
+                    <section data-markdown>
+                        ### Android
+                        Agregar a _dependencies_ en _build.gradle_ de _Module:app_
+                        ```
+                        compile 'me.dm7.barcodescanner:zxing:1.9'
+                        ```
+                        Dar permisos en _AndroidManifest.xml_
+                        ```xml
+                        &ltuses-permission android:name="android.permission.CAMERA" /&gt
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear actividad para capturar stream de la cámara
+                        ```java
+                        public class ZXing extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+
+                            private ZXingScannerView mScannerView;
+
+                            @Override
+                            public void onCreate(Bundle state) {
+                                super.onCreate(state);
+                                mScannerView = new ZXingScannerView(this);
+                                setContentView(mScannerView);
+                            }
+
+                            @Override
+                            public void onResume() {
+                                super.onResume();
+                                mScannerView.setResultHandler(this);
+                                mScannerView.startCamera();
+                            }
+
+                            @Override
+                            public void onPause() {
+                                super.onPause();
+                                mScannerView.stopCamera();
+                            }
+
+                            @Override
+                            public void handleResult(Result result) {
+                                ZXingActivity.barcodeInfo.setText(result.getText());
+                                onBackPressed();
+                            }
+                        }
+                        ```
+                        Instanciar la actividad
+                        ```java
+                        startActivity(new Intent(this, ZXing.class));
+                        ```
                     </section>
                 </section>
                 <section>
@@ -176,6 +243,56 @@
                         * Code 128
                         * Code 39
                         * QR Code
+                    </section>
+                    <section data-markdown>
+                        ### Android
+                        Agregar a _dependencies_ en _build.gradle_ de _Module:app_
+                        ```
+                        compile 'me.dm7.barcodescanner:zbar:1.8.4'
+                        ```
+                        Dar permisos en _AndroidManifest.xml_
+                        ```xml
+                        &ltuses-permission android:name="android.permission.CAMERA" /&gt
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear actividad para capturar stream de la cámara
+                        ```java
+                        public class ZBar extends AppCompatActivity implements ZBarScannerView.ResultHandler {
+
+                            private ZBarScannerView mScannerView;
+
+                            @Override
+                            public void onCreate(Bundle state) {
+                                super.onCreate(state);
+                                mScannerView = new ZBarScannerView(this);
+                                setContentView(mScannerView);
+                            }
+
+                            @Override
+                            public void onResume() {
+                                super.onResume();
+                                mScannerView.setResultHandler(this);
+                                mScannerView.startCamera();
+                            }
+
+                            @Override
+                            public void onPause() {
+                                super.onPause();
+                                mScannerView.stopCamera();
+                            }
+
+                            @Override
+                            public void handleResult(Result result) {
+                                ZBarActivity.barcodeInfo.setText(result.getContents());
+                                onBackPressed();
+                            }
+                        }
+                        ```
+                        Instanciar la actividad
+                        ```java
+                        startActivity(new Intent(this, ZBar.class));
+                        ```
                     </section>
                 </section>
                 <section>
@@ -201,6 +318,21 @@
                         |Code-128||
                         |ITF||
                         |Codabar||
+                    </section>
+                    <section data-markdown>
+                        ### Android
+                        Agregar a _dependencies_ en _build.gradle_ de _Module:app_
+                        ```
+                        compile fileTree(dir: 'libs', include: ['*.jar'])
+                        compile 'com.google.android.gms:play-services:11.0.4'
+                        compile 'com.android.support:appcompat-v7:25.2.0'
+                        ```
+                        En la actividad que se quiere usar el lector añadir
+                        ```java
+                            private SurfaceView cameraView;
+                            private CameraSource cameraSource;
+                            private BarcodeDetector barcodeDetector;
+                        ```
                     </section>
                 </section>
 				<section data-markdown data-background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Example_barcode.svg/2000px-Example_barcode.svg.png">
