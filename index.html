@@ -178,7 +178,11 @@
                         ### Android
                         Agregar a _dependencies_ en _build.gradle_ de _Module:app_
                         ```
-                        compile 'me.dm7.barcodescanner:zxing:1.9'
+                        dependencies {
+                        ...
+                            compile 'me.dm7.barcodescanner:zxing:1.9'
+                        ...
+                        }
                         ```
                         Dar permisos en _AndroidManifest.xml_
                         ```xml
@@ -219,10 +223,67 @@
                             }
                         }
                         ```
+                    </section>
+                    <section data-markdown>
+                        Crear el layout de la actividad que va a dar inicio a la captura
+                        ```xml
+                        &lt?xml version="1.0" encoding="utf-8"?&gt
+                        &ltRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:padding="16dp"&gt
+
+                            &ltTextView
+                                android:id="@+id/zxing_result"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="Nothing to read."
+                                android:textSize="20sp"
+                                android:layout_centerVertical="true"
+                                android:layout_centerHorizontal="true" /&gt
+
+                            &ltButton
+                                android:id="@+id/zxingScanButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/zxing_result"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="17dp"
+                                android:text="Scan ZXing"
+                                android:onClick="scanZXing"/&gt
+
+                        &lt/RelativeLayout&gt
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear la actividad que use la actividad de captura
+                        ```java
+                        public class ZXingActivity extends AppCompatActivity{
+
+                            public static TextView barcodeInfo;
+
+                            @Override
+                            protected void onCreate(Bundle savedInstanceState) {
+                                super.onCreate(savedInstanceState);
+                                setContentView(R.layout.activity_zxing);
+                                barcodeInfo = (TextView) findViewById(R.id.zxing_result);
+                            }
+
+                            public void scanZXing(View view){
+                                startActivity(new Intent(this, ZXing.class));
+                            }
+                        }
+                        ```
+                    </section>
+                    <section data-markdown>
                         Instanciar la actividad
                         ```java
                         startActivity(new Intent(this, ZXing.class));
                         ```
+                    </section>
+                    <section>
+                        <h3>Vista previa</h3>
+                        <img src="https://storage.googleapis.com/jicbucket/barcodes/zxing.gif" width="40%"/>
                     </section>
                 </section>
                 <section>
@@ -248,7 +309,11 @@
                         ### Android
                         Agregar a _dependencies_ en _build.gradle_ de _Module:app_
                         ```
-                        compile 'me.dm7.barcodescanner:zbar:1.8.4'
+                        dependencies {
+                        ...
+                            compile 'me.dm7.barcodescanner:zbar:1.8.4'
+                        ...
+                        }
                         ```
                         Dar permisos en _AndroidManifest.xml_
                         ```xml
@@ -289,10 +354,67 @@
                             }
                         }
                         ```
+                    </section>
+                    <section data-markdown>
+                        Crear el layout de la actividad que va a dar inicio a la captura
+                        ```xml
+                        &lt?xml version="1.0" encoding="utf-8"?&gt
+                        &ltRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:padding="16dp"&gt
+
+                            &ltTextView
+                                android:id="@+id/zbar_result"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="Nothing to read."
+                                android:textSize="20sp"
+                                android:layout_centerVertical="true"
+                                android:layout_centerHorizontal="true" /&gt
+
+                            &ltButton
+                                android:id="@+id/zbarScanButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/zbar_result"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="17dp"
+                                android:text="Scan ZBar"
+                                android:onClick="scanZBar"/&gt
+
+                        &lt/RelativeLayout&gt
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear la actividad que use la actividad de captura
+                        ```java
+                        public class ZBarActivity extends AppCompatActivity{
+
+                            public static TextView barcodeInfo;
+
+                            @Override
+                            protected void onCreate(Bundle savedInstanceState) {
+                                super.onCreate(savedInstanceState);
+                                setContentView(R.layout.activity_zbar);
+                                barcodeInfo = (TextView) findViewById(R.id.zbar_result);
+                            }
+
+                            public void scanZBar(View view){
+                                startActivity(new Intent(this, ZBar.class));
+                            }
+                        }
+                        ```
+                    </section>
+                    <section data-markdown>
                         Instanciar la actividad
                         ```java
                         startActivity(new Intent(this, ZBar.class));
                         ```
+                    </section>
+                    <section>
+                        <h3>Vista previa</h3>
+                        <img src="https://storage.googleapis.com/jicbucket/barcodes/zbar.gif" width="40%"/>
                     </section>
                 </section>
                 <section>
@@ -323,9 +445,13 @@
                         ### Android
                         Agregar a _dependencies_ en _build.gradle_ de _Module:app_
                         ```
-                        compile fileTree(dir: 'libs', include: ['*.jar'])
-                        compile 'com.google.android.gms:play-services:11.0.4'
-                        compile 'com.android.support:appcompat-v7:25.2.0'
+                        dependencies {
+                        ...
+                            compile fileTree(dir: 'libs', include: ['*.jar'])
+                            compile 'com.google.android.gms:play-services:11.0.4'
+                            compile 'com.android.support:appcompat-v7:25.2.0'
+                        ...
+                        }
                         ```
                         En la actividad que se quiere usar el lector añadir
                         ```java
@@ -333,6 +459,10 @@
                             private CameraSource cameraSource;
                             private BarcodeDetector barcodeDetector;
                         ```
+                    </section>
+                    <section>
+                        <h3>Vista previa</h3>
+                        <img src="https://storage.googleapis.com/jicbucket/barcodes/gmba.gif" width="40%"/>
                     </section>
                 </section>
 				<section data-markdown data-background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Example_barcode.svg/2000px-Example_barcode.svg.png">
