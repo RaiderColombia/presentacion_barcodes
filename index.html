@@ -146,8 +146,11 @@
                         <p>ZXing ("zebra crossing") es una librería Open Source para el procesamiento de imágenes de códigos de barras en formatos en una o dos dimensiones</p>
                         <aside class="notes">
                             <ul>
+                                <li>El proyecto inició en Google en el año 2007</li>
                                 <li>Está implementada en Java</li>
                                 <li>Tiene varios ports a otros lenguajes</li>
+                                <li>Distribuido bajo licencia Apache 2.0</li>
+                                <li>Permite la generación y decodificación de códigos QR</li>
                             </ul>
                         </aside>
                     </section>
@@ -171,7 +174,10 @@
                             &ldquo;<i>Scan barcodes on products, or Data Matrix and QR Codes containing URLs, contact info, etc.</i>&rdquo;
                         </blockquote>
                         <aside class="notes">
-                            Tiene una aplicación en la Google Play
+                            <ul>
+                                <li>Tiene una aplicación en la Google Play</li>
+                                <li>Su calificación es de <b>4.1</b> basada en un total de <b>621.528</b></li>
+                            </ul>
                         </aside>
                     </section>
                     <section data-markdown>
@@ -294,6 +300,12 @@
                     <section>
                         <img src="http://zbar.sourceforge.net/img/zbar.200.png" width="20%"/>
                         <p>ZBar es una suite de software Open Source para la lectura de códigos de barras desde varias fuentes tales como: video streams, imágenes, y lecturas de sensores</p>
+                        <aside class="notes">
+                            <ul>
+                                <li>Está implementada en C</li>
+                                <li>Existen aplicaciones para ser usados en Windows/Linux</li>
+                            </ul>
+                        </aside>
                     </section>
                     <section data-markdown>
                         Soporta varios tipos de códigos de barras
@@ -418,12 +430,20 @@
                     </section>
                 </section>
                 <section>
-                    <section data-markdown>
-                        ## Google Mobile Vision (Barcode API)
+                    <section>
+                        <h2>Google Mobile Vision (Barcode API)</h2>
                         https://developers.google.com/vision/android/barcodes-overview
+                        <aside class="notes">
+                            Provee un framework para encontrar objetos en fotos y videos. Este framework incluye detectores que localizan y describen objetos visuales en imágenes y videos. Actualmente incluye:
+                            <ul>
+                                <li>Rostros</li>
+                                <li>Códigos de barras</li>
+                                <li>Texto</li>
+                            </ul>
+                        </aside>
                     </section>
                     <section>
-                        <img src="https://developers.google.com/vision/images/vision-logo-white.png"/>
+                        <img src="http://www.techjini.com/wp-content/uploads/2017/02/blog-front-page.png" width="40%"/>
                         <p>La API de códigos de barras detecta códigos en tiempo real y en cualquier orientación</p>
                         <p>También puede detectar varios códigos de barras al mismo tiempo</p>
                     </section>
@@ -563,10 +583,44 @@
                     </section>
                 </section>
                 <section>
-                    <h2>Conclusiones</h2>
-                    <ul>
-                        <li class="fragment">ZXing soporta más formatos de códigos que ZBar</li>
-                    </ul>
+                    <section>
+                        <h2>Conclusiones</h2>
+                        <aside class="notes">
+                            <ul>
+                                <li>Cada librería tiene inconvenientes. Escoger la librería depende del proyecto</li>
+                                <li>ZXing soporta más formatos de códigos que ZBar</li>
+                            </ul>
+                        </aside>
+                    </section>
+                    <section>
+                        <h3>ZXing</h3>
+                        <ul>
+                            <li class="fragment">Es la más antigua de las 3, la más popular y aún recibe actualizaciones</li>
+                            <li class="fragment">Solo puede escanear códigos en la misma orientación de la cámara</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>ZBar</h3>
+                        <ul>
+                            <li class="fragment">Es muy rápido para detectar los códigos, incluso antes de estabilizar el dispositivo</li>
+                            <li class="fragment">Detecta códigos en múltiples orientaciones</li>
+                            <li class="fragment">No se ha actualizado recientemente. El último commit fue en 2012</li>
+                            <li class="fragment">Carece de documentación</li>
+                            <li class="fragment">A veces se necesita reescanear</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Google Mobile Vision</h3>
+                        <ul>
+                            <li class="fragment">Puede detectar varios códigos al mismo tiempo</li>
+                            <li class="fragment">Detecta códigos en múltiples orientaciones</li>
+                            <li class="fragment">Es muy rápido para detectar los códigos</li>
+                            <li class="fragment">Siempre se tendrá la última versión de la librería</li>
+                            <li class="fragment">Es una librería nativa para android</li>
+                            <li class="fragment">Se debe descargar la librería antes de poder utilizarse</li>
+                        </ul>
+                        <aside class="notes">Si el dispositivo no tiene suficiente espacio no se descarga la librería</aside>
+                    </section>
                 </section>
 				<section data-markdown data-background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Example_barcode.svg/2000px-Example_barcode.svg.png">
                     # Gracias
