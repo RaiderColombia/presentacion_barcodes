@@ -453,17 +453,120 @@
                         ...
                         }
                         ```
-                        En la actividad que se quiere usar el lector añadir
+                    </section>
+                    <section data-markdown>
+                        Definir el layout
+                        ```xml
+                        &lt?xml version="1.0" encoding="utf-8"?&gt
+                        &ltRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent" android:layout_height="match_parent"
+                            android:padding="16dp"&gt
+
+                            &ltSurfaceView
+                                android:id="@+id/camera_view"
+                                android:layout_width="640dp"
+                                android:layout_height="400dp"
+                                android:layout_alignParentLeft="true" /&gt
+
+                            &ltTextView
+                                android:id="@+id/mobile_vision_result"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/camera_view"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginTop="21dp"
+                                android:text="Nothing to read."
+                                android:textSize="20sp" /&gt
+
+                        &lt/RelativeLayout&gt
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear una actividad y en ella declarar
                         ```java
                             private SurfaceView cameraView;
                             private CameraSource cameraSource;
                             private BarcodeDetector barcodeDetector;
+                        ```
+                        Sobrescribir el método _onCreate_ y obtener las referencias de los widgets definidos en el layout
+                        ```java
+                        cameraView = (SurfaceView) findViewById(R.id.camera_view);
+                        barcodeInfo = (TextView) findViewById(R.id.mobile_vision_result);
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear el detector que se va a usar para detectar los códigos y la fuente de imágenes que se presentarán en el _SurfaceView_
+                        ```java
+                        barcodeDetector = new BarcodeDetector.Builder(this).build();
+                        cameraSource = new CameraSource
+                                .Builder(this, barcodeDetector)
+                                .setRequestedPreviewSize(640, 400)
+                                .build();
+                        ```
+                        Se puede cambiar la vista previa de la cámara con _setRequestedPreviewSize_
+
+                    </section>
+                    <section data-markdown>
+                        Agregar un _callback_ al _SurfaceHolder_ de la _SurfaceView_ que permita saber cuando se pueden dibujar la vista previa de la camára
+                        ```java
+                        cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+                            @Override
+                            public void surfaceCreated(SurfaceHolder holder) {
+                                try {
+                                    if (ActivityCompat.checkSelfPermission(
+                                            getApplicationContext(),
+                                            android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                        return;
+                                    }
+                                    camerasource.start(cameraview.getholder());
+                                } catch (ioexception ie) {
+                                    log.e("camera source", ie.getmessage());
+                                }
+                            }
+
+                            @override
+                            public void surfacechanged(surfaceholder holder, int format, int width, int height) {}
+
+                            @override
+                            public void surfacedestroyed(surfaceholder holder) {
+                                camerasource.stop();
+                            }
+                        });
+                        ```
+                    </section>
+                    <section data-markdown>
+                        Crear una instancia de una clase que implemente la interfaz _Detector.Processor_ para indicarle al detector que hacer cuando detecte un código
+                        ```java
+                            barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+                            @Override
+                            public void release() {}
+
+                            @Override
+                            public void receiveDetections(Detector.Detections<Barcode> detections) {
+                                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+
+                                if (barcodes.size() != 0) {
+                                    barcodeInfo.post(new Runnable() {
+                                        public void run() {
+                                            barcodeInfo.setText(barcodes.valueAt(0).displayValue);
+                                        }
+                                    });
+                                }
+                            }
+                        });
                         ```
                     </section>
                     <section>
                         <h3>Vista previa</h3>
                         <img src="https://storage.googleapis.com/jicbucket/barcodes/gmba.gif" width="40%"/>
                     </section>
+                </section>
+                <section>
+                    <h2>Conclusiones</h2>
+                    <ul>
+                        <li class="fragment">ZXing soporta más formatos de códigos que ZBar</li>
+                    </ul>
                 </section>
 				<section data-markdown data-background-image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Example_barcode.svg/2000px-Example_barcode.svg.png">
                     # Gracias
