@@ -649,22 +649,22 @@
                         Crear una instancia de una clase que implemente la interfaz _Detector.Processor_ para indicarle al detector que hacer cuando detecte un código
                         ```java
                             barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-                            @Override
-                            public void release() {}
+				    @Override
+				    public void release() {}
 
-                            @Override
-                            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+				    @Override
+				    public void receiveDetections(Detector.Detections<Barcode> detections) {
+					final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
-                                if (barcodes.size() != 0) {
-                                    barcodeInfo.post(new Runnable() {
-                                        public void run() {
-                                            barcodeInfo.setText(barcodes.valueAt(0).displayValue);
-                                        }
-                                    });
-                                }
-                            }
-                        });
+					if (barcodes.size() != 0) {
+					    barcodeInfo.post(new Runnable() {
+						public void run() {
+						    barcodeInfo.setText(barcodes.valueAt(0).displayValue);
+						}
+					    });
+					}
+				    }
+			    });
                         ```
                     </section>
                     <section>
